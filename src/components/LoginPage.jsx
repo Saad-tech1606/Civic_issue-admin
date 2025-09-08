@@ -1,138 +1,98 @@
-import authImage from '../assets/login&signup.png';
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-// SVG Icon Components for better readability
-const MailIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-    viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
-    className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400">
-    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-  </svg>
-);
-
-const LockIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-    viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
-    className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400">
-    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-  </svg>
-);
-
-function LoginPage({ onToggle }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [remember, setRemember] = useState(false);
+export default function LoginPage({ onLogin, onSwitchToSignup }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      const form = e.target;
-      const submitButton = form.querySelector('button[type="submit"]');
-      if (submitButton) {
-        submitButton.classList.add('animate-shake');
-        setTimeout(() => {
-          submitButton.classList.remove('animate-shake');
-        }, 500);
-      }
-      return;
+    if (onLogin) {
+      onLogin({ email, password });
+      // Show success pop-up
+      alert(`Welcome!\nEmail: ${email}`);
     }
-    console.log('Logging in with:', { email, password, remember });
-    alert(`Welcome!\nEmail: ${email}\nRemember Me: ${remember}`);
   };
 
   return (
-    <div 
-      className="relative flex items-center justify-center min-h-screen p-4 font-sans text-gray-100 group overflow-hidden"
-      style={{
-        backgroundImage: `url(${authImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        transition: 'transform 0.5s ease-out',
-        transform: 'scale(1)',
-      }}
-      onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.03)'}
-      onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-    >
-      {/* Overlay */}
-      <div 
-        className="absolute inset-0 bg-gray-900 opacity-60 group-hover:opacity-30 transition-opacity duration-700"
-        style={{ animation: 'fadeIn 1s ease-out forwards' }}
-      ></div>
+    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
+      {/* Background Aesthetic Circles */}
+      <div className="absolute w-72 h-72 bg-blue-600 rounded-full blur-3xl opacity-20 top-10 left-10 animate-pulse"></div>
+      <div className="absolute w-96 h-96 bg-purple-600 rounded-full blur-3xl opacity-20 bottom-10 right-10 animate-pulse"></div>
 
-      <div 
-        className="relative z-10 w-full max-w-sm sm:max-w-md bg-gray-800/95 rounded-2xl shadow-2xl p-8 sm:p-12 transition-all duration-300 transform animate-fadeInScaleUp"
-      >
-        <div>
-          <h2 className="text-3xl font-bold text-white text-center mb-2">Welcome Back</h2>
-          <p className="text-center text-gray-400 mb-8">Sign in to continue</p>
-          
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email Input */}
-            <div className="relative">
-              <MailIcon />
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-gray-700/70 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 focus:border-indigo-500 hover:border-indigo-500"
-                required
-              />
-            </div>
-
-            {/* Password Input */}
-            <div className="relative">
-              <LockIcon />
-              <input
-                type="password"
-                placeholder="Password (min 6, alphanumeric)"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                pattern="[A-Za-z0-9]+"
-                minLength={6}
-                title="Password must be at least 6 characters and contain only letters and numbers"
-                className="w-full pl-10 pr-4 py-3 bg-gray-700/70 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 focus:border-indigo-500 hover:border-indigo-500"
-                required
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={remember}
-                  onChange={(e) => setRemember(e.target.checked)}
-                  className="form-checkbox h-4 w-4 bg-gray-700 border-gray-600 rounded text-indigo-500 focus:ring-indigo-500" 
-                />
-                <span className="text-sm text-gray-400">Remember me</span>
-              </label>
-              <a href="#" className="text-sm text-indigo-400 hover:underline hover:text-indigo-300 transition-colors duration-200">
-                Forgot Password?
-              </a>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:shadow-indigo-600/40 active:animate-buttonPress"
-            >
-              Login
-            </button>
-          </form>
-
-          <p className="text-center text-gray-500 text-sm mt-8">
-            Don't have an account? <a onClick={onToggle} className="text-indigo-400 hover:underline font-semibold cursor-pointer hover:text-indigo-300 transition-colors duration-200">Sign up</a>
-          </p>
+      {/* Glassmorphic Login Card */}
+      <div className="relative z-10 w-full max-w-md p-8 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-xl border border-white/20">
+        
+        {/* Government Seal / Logo Placeholder */}
+        <div className="flex justify-center mb-4">
+          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+            <span className="text-white font-bold text-xl">🏛️</span>
+          </div>
         </div>
+
+        <h1 className="text-3xl font-bold text-white text-center mb-2">
+          Civic<span className="text-blue-400">Admin</span> Portal
+        </h1>
+        <p className="text-gray-400 text-center mb-6 text-sm">
+          Authorized Government Officials Only
+        </p>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          {/* Email Input */}
+          <input
+            type="email"
+            placeholder="Official Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="px-4 py-3 rounded-xl bg-gray-900/60 text-white border border-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-500/30 transition-all outline-none"
+            required
+          />
+
+          {/* Password Input */}
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="px-4 py-3 rounded-xl bg-gray-900/60 text-white border border-gray-700 focus:border-purple-500 focus:ring focus:ring-purple-500/30 transition-all outline-none"
+            required
+          />
+
+          {/* Remember Me + Forgot Password */}
+          <div className="flex items-center justify-between text-sm text-gray-400">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" className="accent-blue-500" />
+              Remember me
+            </label>
+            <a href="#" className="text-blue-400 hover:underline">
+              Forgot Password?
+            </a>
+          </div>
+
+          {/* Login Button */}
+          <button
+            type="submit"
+            className="mt-2 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all"
+          >
+            Secure Login
+          </button>
+        </form>
+
+        {/* Switch to Signup */}
+        <p className="mt-6 text-gray-400 text-sm text-center">
+          Don’t have an account?{" "}
+          <button
+            onClick={onSwitchToSignup}
+            className="text-blue-400 hover:underline"
+          >
+            Request Signup
+          </button>
+        </p>
+
+        {/* Security Notice */}
+        <p className="mt-4 text-gray-500 text-xs text-center">
+          ⚠️ Unauthorized access is prohibited and may be subject to disciplinary action.
+        </p>
       </div>
     </div>
   );
 }
-
-export default LoginPage;

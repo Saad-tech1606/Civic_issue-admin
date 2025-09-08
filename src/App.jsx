@@ -1,23 +1,16 @@
-// src/App.js
-
 import React, { useState } from 'react';
-import LoginPage from './components/LoginPage'; // Assuming your original file is now a component
-import SignupPage from './components/SignupPage';
+import LoginPage from './components/LoginPage';
+import CivicAdminApp from './components/CivicAdminApp';
 
 function App() {
-  const [isLogin, setIsLogin] = useState(true); // State to toggle between login and signup
-
-  const togglePage = () => {
-    setIsLogin(!isLogin);
-  };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <div>
-      {/* Conditionally render the correct page */}
-      {isLogin ? (
-        <LoginPage onToggle={togglePage} />
+      {isLoggedIn ? (
+        <CivicAdminApp onLogout={() => setIsLoggedIn(false)} />
       ) : (
-        <SignupPage onToggle={togglePage} />
+        <LoginPage onLogin={() => setIsLoggedIn(true)} />
       )}
     </div>
   );
