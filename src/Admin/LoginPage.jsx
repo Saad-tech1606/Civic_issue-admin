@@ -1,3 +1,4 @@
+// src/Admin/LoginPage.jsx
 import React, { useState } from "react";
 
 export default function LoginPage({ onLogin, onSwitchToSignup }) {
@@ -6,10 +7,15 @@ export default function LoginPage({ onLogin, onSwitchToSignup }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      alert("⚠️ Please enter both email and password.");
+      return;
+    }
+
+    // 🔑 Pass credentials back to parent
     if (onLogin) {
       onLogin({ email, password });
-      // Show success pop-up
-      alert(`Welcome!\nEmail: ${email}`);
     }
   };
 
@@ -21,8 +27,7 @@ export default function LoginPage({ onLogin, onSwitchToSignup }) {
 
       {/* Glassmorphic Login Card */}
       <div className="relative z-10 w-full max-w-md p-8 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-xl border border-white/20">
-        
-        {/* Government Seal / Logo Placeholder */}
+        {/* Logo */}
         <div className="flex justify-center mb-4">
           <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
             <span className="text-white font-bold text-xl">🏛️</span>
@@ -81,6 +86,7 @@ export default function LoginPage({ onLogin, onSwitchToSignup }) {
         <p className="mt-6 text-gray-400 text-sm text-center">
           Don’t have an account?{" "}
           <button
+            type="button"
             onClick={onSwitchToSignup}
             className="text-blue-400 hover:underline"
           >

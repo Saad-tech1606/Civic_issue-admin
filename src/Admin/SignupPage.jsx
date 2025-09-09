@@ -1,3 +1,4 @@
+// src/Admin/SignupPage.jsx
 import React, { useState } from "react";
 
 export default function SignupPage({ onSignup, onSwitchToLogin }) {
@@ -16,7 +17,9 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
     if (onSignup) {
       onSignup({ fullName, email, password, department });
       // ✅ Show success pop-up
-      alert(`✅ Account created successfully!\nName: ${fullName}\nEmail: ${email}\nDepartment: ${department}`);
+      alert(
+        `✅ Account created successfully!\nName: ${fullName}\nEmail: ${email}\nDepartment: ${department}`
+      );
     }
   };
 
@@ -28,11 +31,18 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
 
       {/* Signup Card */}
       <div className="relative z-10 w-full max-w-lg p-8 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-xl border border-white/20">
-        <h1 className="text-3xl font-bold text-white text-center mb-4">
-          🏛 Official Registration
+        {/* Logo */}
+        <div className="flex justify-center mb-4">
+          <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center shadow-lg">
+            <span className="text-white font-bold text-xl">🛡️</span>
+          </div>
+        </div>
+
+        <h1 className="text-3xl font-bold text-white text-center mb-2">
+          Civic<span className="text-purple-400">Admin</span> Signup
         </h1>
-        <p className="text-gray-300 text-center mb-8">
-          Create your secure <span className="text-blue-400">CivicAdmin</span> account
+        <p className="text-gray-300 text-center mb-6 text-sm">
+          Register as an authorized government official
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -96,7 +106,7 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
           {/* Signup Button */}
           <button
             type="submit"
-            className="mt-2 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all"
+            className="mt-2 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all"
           >
             Create Account
           </button>
@@ -111,6 +121,12 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
           >
             Login Here
           </button>
+        </p>
+
+        {/* Security Note */}
+        <p className="mt-4 text-gray-500 text-xs text-center">
+          ⚠️ Signup requests will be reviewed and verified by the system
+          administrator.
         </p>
       </div>
     </div>
