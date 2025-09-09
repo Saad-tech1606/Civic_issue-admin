@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import potholeImg from "../assets/pothole.avif";
@@ -15,11 +14,18 @@ import {
   MdRedeem,
   MdSettings,
   MdContactMail,
-  MdExpandMore,
-  MdExpandLess,
 } from "react-icons/md";
 import { FaRegCommentDots, FaRegBell } from "react-icons/fa";
 import ReactCountryFlag from "react-country-flag";
+
+// Hamburger icon JSX
+const Hamburger = ({ size = 28, color = "#fff" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <rect y="5" width="24" height="2" rx="1" fill={color} />
+    <rect y="11" width="24" height="2" rx="1" fill={color} />
+    <rect y="17" width="24" height="2" rx="1" fill={color} />
+  </svg>
+);
 
 // Recharts imports
 import {
@@ -50,6 +56,7 @@ const data = [
 export default function LandingPage() {
   const [analyticsOpen, setAnalyticsOpen] = useState(false);
   const [hovered, setHovered] = useState(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const civicImages = [
     { id: 1, src: potholeImg, title: "Report Potholes" },
@@ -60,7 +67,11 @@ export default function LandingPage() {
   return (
     <div className="flex h-screen w-full overflow-hidden bg-[#0f1923] text-white">
       {/* Sidebar */}
-      <aside className="w-64 h-screen bg-[#131d29] border-r border-gray-800 flex flex-col justify-between">
+      <aside
+        className={`h-screen bg-[#131d29] border-r border-gray-800 flex flex-col justify-between transition-all duration-300
+          ${sidebarCollapsed ? "w-20" : "w-64"}
+        `}
+      >
         <div>
           <div className="flex items-center px-6 pt-6 pb-3">
             <span className="bg-blue-600 rounded-lg p-2 mr-3 shadow-md">
@@ -69,11 +80,22 @@ export default function LandingPage() {
                 <rect x="8" y="8" width="8" height="8" fill="#fff" />
               </svg>
             </span>
-            <span className="text-2xl font-extrabold tracking-wide text-white">
-              Civicitizen
-            </span>
+            {!sidebarCollapsed && (
+              <span className="text-2xl font-extrabold tracking-wide text-white">
+                Civicitizen
+              </span>
+            )}
           </div>
-          <div className="px-6 text-xs text-gray-400 mt-2 mb-2">PAGES</div>
+
+          {/* Fixed className */}
+          <div
+            className={`px-6 text-xs text-gray-400 mt-2 mb-2 ${
+              sidebarCollapsed ? "hidden" : ""
+            }`}
+          >
+            PAGES
+          </div>
+
           <nav>
             <ul className="space-y-1 px-2">
               {[
@@ -87,7 +109,7 @@ export default function LandingPage() {
                     className="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#1d2a36] hover:text-white transition-all"
                   >
                     {item.icon}
-                    <span className="ml-3">{item.label}</span>
+                    {!sidebarCollapsed && <span className="ml-3">{item.label}</span>}
                   </Link>
                 </li>
               ))}
@@ -98,12 +120,16 @@ export default function LandingPage() {
                   onClick={() => setAnalyticsOpen((v) => !v)}
                   className="w-full flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#1d2a36] hover:text-white transition-all focus:outline-none"
                 >
-                  <MdTrendingUp className="w-5 h-5 mr-3" /> Analytics
-                  <span className="ml-auto">
-                    {analyticsOpen ? <MdExpandLess /> : <MdExpandMore />}
+                  <MdTrendingUp className="w-5 h-5 mr-3" />
+                  {!sidebarCollapsed && <span className="ml-3">Analytics</span>}
+                  {/* Fixed className */}
+                  <span className={`${sidebarCollapsed ? "hidden" : "ml-auto"}`}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d={analyticsOpen ? "M7 14l5-5 5 5" : "M7 10l5 5 5-5"} />
+                    </svg>
                   </span>
                 </button>
-                {analyticsOpen && (
+                {analyticsOpen && !sidebarCollapsed && (
                   <ul className="ml-8 mt-1 mb-1 space-y-1">
                     <li>
                       <Link
@@ -130,7 +156,7 @@ export default function LandingPage() {
                     className="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#1d2a36] hover:text-white transition-all"
                   >
                     {item.icon}
-                    <span className="ml-3">{item.label}</span>
+                    {!sidebarCollapsed && <span className="ml-3">{item.label}</span>}
                   </Link>
                 </li>
               ))}
@@ -139,22 +165,41 @@ export default function LandingPage() {
         </div>
 
         {/* Sidebar footer */}
-        <div className="p-4 border-t border-gray-700 flex items-center gap-3">
+        <div
+          className={`p-4 border-t border-gray-700 flex items-center gap-3 transition-all duration-300 ${
+            sidebarCollapsed ? "justify-center" : ""
+          }`}
+        >
           <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
             <MdPerson className="w-8 h-8" />
           </div>
-          <div>
-            <div className="font-semibold text-white">Arun Sharma</div>
-            <div className="text-sm text-gray-400">arun.sharma@email.com</div>
-          </div>
+          {!sidebarCollapsed && (
+            <div>
+              <div className="font-semibold text-white">Arun Sharma</div>
+              <div className="text-sm text-gray-400">arun.sharma@email.com</div>
+            </div>
+          )}
         </div>
       </aside>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Navbar */}
-        <nav className="fixed top-0 left-64 w-[calc(100%-16rem)] z-50 bg-[#131d29] border-b border-gray-800 px-6 py-3 shadow-md flex items-center justify-between">
+        <nav
+          className={`fixed top-0 z-50 bg-[#131d29] border-b border-gray-800 px-6 py-3 shadow-md flex items-center justify-between transition-all duration-300
+            ${sidebarCollapsed ? "left-20 w-[calc(100%-5rem)]" : "left-64 w-[calc(100%-16rem)]"}
+          `}
+        >
           <div className="flex items-center w-1/3">
+            {/* Hamburger button beside search */}
+            <button
+              onClick={() => setSidebarCollapsed((prev) => !prev)}
+              className="mr-4 p-2 rounded hover:bg-[#223049] focus:outline-none transition flex items-center"
+              aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              style={{ minWidth: 36 }}
+            >
+              <Hamburger size={24} color="#fff" />
+            </button>
             <div className="relative w-full">
               <span className="absolute left-3 top-2 text-gray-400">🔍</span>
               <input
@@ -179,8 +224,6 @@ export default function LandingPage() {
                 7
               </span>
             </Link>
-
-            {/* Login Buttons */}
             <Link
               to="/User/Userlogin"
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-semibold transition shadow"
@@ -253,10 +296,14 @@ export default function LandingPage() {
             <div className="bg-[#1c2836] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
               <h3 className="text-lg font-semibold mb-2">About Jharkhand</h3>
               <p className="text-gray-400 text-sm">
-                Jharkhand ("The land of forest") is a State in eastern India, created on 15 November 2000, from what was previously the southern half of Bihar.The State shares its border with the States of Bihar to the north, Uttar Pradesh to the northwest, Chhattisgarh to the west, Odisha to the south and West Bengal to the east. It has an area of 79,714 km² (30,778 sq mi). It is the 15th largest State by area, and the 14th largest by population. Hindi is the official language of the State.The city of Ranchi is its capital and Dumka its sub capital. The State is known for its waterfalls, hills and holy places: Baidyanath Dham, Parasnath and Rajrappa are major religious sites.
+                Jharkhand ("The land of forest") is a State in eastern India, created on 15 November 2000, 
+                from what was previously the southern half of Bihar. The State shares its border with the 
+                States of Bihar to the north, Uttar Pradesh to the northwest, Chhattisgarh to the west, 
+                Odisha to the south and West Bengal to the east. It has an area of 79,714 km². The city of 
+                Ranchi is its capital and Dumka its sub capital. The State is known for its waterfalls, hills 
+                and holy places: Baidyanath Dham, Parasnath and Rajrappa are major religious sites.
               </p>
             </div>
-
             {/* Chart */}
             <div className="md:col-span-2 bg-[#1c2836] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
               <h2 className="text-lg font-semibold mb-4">
