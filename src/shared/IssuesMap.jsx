@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -38,8 +38,8 @@ export default function IssuesMap({ markers = [] }) {
   return (
     <div className="w-full h-full rounded-2xl overflow-hidden shadow-xl">
       <MapContainer
-        center={[23.3441, 85.3096]} // default center (India)
-        zoom={12}
+        center={[23.3441, 85.3096]} // Default center (Jharkhand)
+        zoom={7}
         className="h-full w-full"
       >
         <TileLayer
@@ -47,18 +47,26 @@ export default function IssuesMap({ markers = [] }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         />
 
-        {/* Safely render markers */}
+        {/* Render markers with labels */}
         {markers.map((m, i) => (
           <Marker
             key={i}
             position={[m.lat, m.lon]}
             icon={statusIcons[m.status] || statusIcons["Pending"]}
           >
+            {/* Popup (on click) */}
             <Popup>
               <strong>{m.title}</strong> <br />
               📍 {m.address || "Unknown Location"} <br />
               ⚡ Status: {m.status}
             </Popup>
+
+            {/* Tooltip (always visible as tag) */}
+            <Tooltip permanent direction="top" offset={[0, -20]}>
+              <div className="text-xs font-semibold text-black">
+                {m.location || m.address || "Unknown"}
+              </div>
+            </Tooltip>
           </Marker>
         ))}
       </MapContainer>

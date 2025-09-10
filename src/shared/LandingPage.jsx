@@ -173,12 +173,7 @@ export default function LandingPage() {
           <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
             <MdPerson className="w-8 h-8" />
           </div>
-          {!sidebarCollapsed && (
-            <div>
-              <div className="font-semibold text-white">Arun Sharma</div>
-              <div className="text-sm text-gray-400">arun.sharma@email.com</div>
-            </div>
-          )}
+          
         </div>
       </aside>
 

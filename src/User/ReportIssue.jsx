@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { MdReportProblem, MdLocationOn, MdCategory, MdImage, MdMyLocation } from "react-icons/md";
-import { useNavigate } from "react-router-dom"; // ✅ Import
+import {
+  MdReportProblem,
+  MdLocationOn,
+  MdCategory,
+  MdImage,
+  MdMyLocation,
+  MdAudiotrack,
+  MdVideocam,
+} from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 export default function ReportIssue() {
   const [form, setForm] = useState({
@@ -10,11 +18,13 @@ export default function ReportIssue() {
     location: "",
     description: "",
     image: null,
+    audio: null,
+    video: null,
   });
 
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState({ image: null, audio: null, video: null });
   const [loadingLocation, setLoadingLocation] = useState(false);
-  const navigate = useNavigate(); // ✅ Initialize navigate
+  const navigate = useNavigate();
 
   const categories = ["Pothole", "Garbage", "Streetlight", "Water Supply", "Other"];
 
@@ -23,11 +33,11 @@ export default function ReportIssue() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageUpload = (e) => {
+  const handleFileUpload = (e, type) => {
     const file = e.target.files[0];
     if (file) {
-      setForm((prev) => ({ ...prev, image: file }));
-      setPreview(URL.createObjectURL(file));
+      setForm((prev) => ({ ...prev, [type]: file }));
+      setPreview((prev) => ({ ...prev, [type]: URL.createObjectURL(file) }));
     }
   };
 
@@ -42,14 +52,11 @@ export default function ReportIssue() {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        console.log("📍 Latitude:", latitude, "Longitude:", longitude);
-
         try {
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
           );
           const data = await res.json();
-
           setForm((prev) => ({
             ...prev,
             location: data.display_name || `${latitude}, ${longitude}`,
@@ -61,7 +68,6 @@ export default function ReportIssue() {
             location: `${latitude}, ${longitude}`,
           }));
         }
-
         setLoadingLocation(false);
       },
       (error) => {
@@ -69,7 +75,7 @@ export default function ReportIssue() {
         alert("⚠️ Unable to fetch location");
         setLoadingLocation(false);
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 } // ✅ Better accuracy
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
@@ -85,10 +91,18 @@ export default function ReportIssue() {
     alert("✅ Your issue has been reported!");
 
     // Reset form
-    setForm({ title: "", category: "", location: "", description: "", image: null });
-    setPreview(null);
+    setForm({
+      title: "",
+      category: "",
+      location: "",
+      description: "",
+      image: null,
+      audio: null,
+      video: null,
+    });
+    setPreview({ image: null, audio: null, video: null });
 
-    // ✅ Redirect to Landing Page
+    // Redirect
     navigate("/");
   };
 
@@ -145,7 +159,7 @@ export default function ReportIssue() {
             </select>
           </div>
 
-          {/* Location with Fetch Button */}
+          {/* Location */}
           <div>
             <label className="text-gray-300 font-semibold flex items-center gap-2">
               <MdLocationOn /> Location *
@@ -194,13 +208,13 @@ export default function ReportIssue() {
             <input
               type="file"
               accept="image/*"
-              onChange={handleImageUpload}
+              onChange={(e) => handleFileUpload(e, "image")}
               className="w-full mt-2 p-2 rounded-xl bg-gray-800 text-gray-200"
             />
-            {preview && (
+            {preview.image && (
               <div className="mt-3">
                 <img
-                  src={preview}
+                  src={preview.image}
                   alt="Preview"
                   className="w-full h-48 object-cover rounded-xl border border-gray-700 shadow-md"
                 />
@@ -208,7 +222,50 @@ export default function ReportIssue() {
             )}
           </div>
 
-          {/* Submit Button */}
+          {/* Audio Upload */}
+          <div>
+            <label className="text-gray-300 font-semibold flex items-center gap-2">
+              <MdAudiotrack /> Upload Audio
+            </label>
+            <input
+              type="file"
+              accept="audio/*"
+              onChange={(e) => handleFileUpload(e, "audio")}
+              className="w-full mt-2 p-2 rounded-xl bg-gray-800 text-gray-200"
+            />
+            {preview.audio && (
+              <div className="mt-3">
+                <audio controls className="w-full">
+                  <source src={preview.audio} type="audio/*" />
+                  Your browser does not support audio playback.
+                </audio>
+              </div>
+            )}
+          </div>
+
+          {/* Video Upload */}
+          <div>
+            <label className="text-gray-300 font-semibold flex items-center gap-2">
+              <MdVideocam /> Upload Video
+            </label>
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => handleFileUpload(e, "video")}
+              className="w-full mt-2 p-2 rounded-xl bg-gray-800 text-gray-200"
+            />
+            {preview.video && (
+              <div className="mt-3">
+                <video
+                  src={preview.video}
+                  controls
+                  className="w-full h-48 rounded-xl border border-gray-700 shadow-md"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Submit */}
           <motion.button
             whileTap={{ scale: 0.95 }}
             type="submit"

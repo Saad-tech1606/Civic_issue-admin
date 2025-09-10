@@ -55,13 +55,8 @@ export default function ProfileOverview() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-10 animate-fadeIn">
         {/* Profile Card */}
         <div className="bg-gradient-to-br from-[#1b1f3c]/80 to-[#0f1329]/90 rounded-3xl p-10 shadow-xl border border-white/10 flex flex-col items-center">
-          <img
-            src="https://i.pravatar.cc/100"
-            alt="profile"
-            className="w-28 h-28 rounded-full mb-6 ring-4 ring-blue-500/50 shadow-2xl"
-          />
-          <h2 className="text-3xl font-extrabold tracking-wide mb-2">Citizen User</h2>
-          <p className="text-blue-300 font-medium text-sm mb-8">Active Reporter</p>
+          <h2 className="text-3xl font-extrabold tracking-wide mb-2">Anonymus 369</h2>
+          <p className="text-blue-300 font-medium text-sm mb-8">Your Identity is confidential</p>
           <div className="w-full text-left">
             <h3 className="text-white text-lg font-semibold mb-2">About</h3>
             <p className="text-gray-300 text-base">
