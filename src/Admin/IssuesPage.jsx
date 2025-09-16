@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 export default function IssuesPage() {
   const [issues, setIssues] = useState([
-    { id: 1, title: "Pothole near Main Road", status: "Pending", date: "2025-09-07", notes: "" },
+    { id: 1, title: "Pothole near Main Road", status: "Pending", date: "2025-09-11", notes: "" },
     { id: 2, title: "Streetlight not working", status: "In Progress", date: "2025-09-05", notes: "" },
     { id: 3, title: "Garbage overflow", status: "Resolved", date: "2025-09-01", notes: "" },
     { id: 4, title: "Water leakage near park", status: "Pending", date: "2025-09-03", notes: "" },
