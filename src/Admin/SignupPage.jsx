@@ -1,37 +1,61 @@
-// src/Admin/SignupPage.jsx
 import React, { useState } from "react";
+import axios from "axios";
 
-export default function SignupPage({ onSignup, onSwitchToLogin }) {
+export default function SignupPage({ onSwitchToLogin }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [department, setDepartment] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ loading state
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("❌ Passwords do not match!");
+
+    if (password.trim() !== confirmPassword.trim()) {
+      setPasswordError("❌ Passwords do not match!");
       return;
+    } else {
+      setPasswordError("");
     }
-    if (onSignup) {
-      onSignup({ fullName, email, password, department });
-      // ✅ Show success pop-up
-      alert(
-        `✅ Account created successfully!\nName: ${fullName}\nEmail: ${email}\nDepartment: ${department}`
+
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        "https://backend-civic.onrender.com/admin/admin_insert",
+        {
+          fullname: fullName, // 👈 make sure backend expects "fullname"
+          email,
+          department,
+          password,
+          confirmPassword,
+        }
       );
+
+      if (response.status === 200 || response.status === 201) {
+        alert("✅ Account created successfully!");
+        if (onSwitchToLogin) onSwitchToLogin();
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
+      alert(
+        `❌ Signup failed: ${
+          error.response?.data?.message || "Server error"
+        }`
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
-      {/* Background accents */}
       <div className="absolute w-80 h-80 bg-blue-600 rounded-full blur-3xl opacity-20 top-10 left-10 animate-pulse"></div>
       <div className="absolute w-96 h-96 bg-purple-600 rounded-full blur-3xl opacity-20 bottom-10 right-10 animate-pulse"></div>
 
-      {/* Signup Card */}
       <div className="relative z-10 w-full max-w-lg p-8 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-xl border border-white/20">
-        {/* Logo */}
         <div className="flex justify-center mb-4">
           <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center shadow-lg">
             <span className="text-white font-bold text-xl">🛡️</span>
@@ -46,7 +70,6 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          {/* Full Name */}
           <input
             type="text"
             placeholder="Full Name"
@@ -56,7 +79,6 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
             required
           />
 
-          {/* Email */}
           <input
             type="email"
             placeholder="Official Email (gov.in)"
@@ -66,7 +88,6 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
             required
           />
 
-          {/* Department */}
           <select
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
@@ -83,7 +104,6 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
             <option value="Municipal">Municipal Administration</option>
           </select>
 
-          {/* Password */}
           <input
             type="password"
             placeholder="Password"
@@ -93,7 +113,6 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
             required
           />
 
-          {/* Confirm Password */}
           <input
             type="password"
             placeholder="Confirm Password"
@@ -103,16 +122,26 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
             required
           />
 
-          {/* Signup Button */}
+          {/* Password mismatch message */}
+          {passwordError && (
+            <p className="text-red-500 text-sm">{passwordError}</p>
+          )}
+
           <button
             type="submit"
-            className="mt-2 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all"
+            disabled={loading}
+            className={`mt-2 py-3 ${
+              loading
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-gradient-to-r from-purple-600 to-blue-600"
+            } text-white font-semibold rounded-xl shadow-lg transition-all ${
+              !loading && "hover:scale-105 hover:shadow-2xl"
+            }`}
           >
-            Create Account
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 
-        {/* Switch to Login */}
         <p className="mt-6 text-gray-400 text-sm text-center">
           Already registered?{" "}
           <button
@@ -123,7 +152,6 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
           </button>
         </p>
 
-        {/* Security Note */}
         <p className="mt-4 text-gray-500 text-xs text-center">
           ⚠️ Signup requests will be reviewed and verified by the system
           administrator.

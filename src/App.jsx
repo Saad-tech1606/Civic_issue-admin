@@ -28,7 +28,7 @@ function App() {
       <Route path="/map" element={<IssuesMap />} />
 
       {/* User login/signup */}
-      <Route path="/User/Userlogin" element={<UserLogin />} />
+      <Route path="/User/login" element={<UserLogin />} />
       <Route path="/User/signup" element={<UserSignup />} />
 
       {/* Civic User App */}

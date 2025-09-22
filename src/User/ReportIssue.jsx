@@ -10,6 +10,7 @@ import {
   MdVideocam,
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function ReportIssue() {
   const [form, setForm] = useState({
@@ -24,6 +25,7 @@ export default function ReportIssue() {
 
   const [preview, setPreview] = useState({ image: null, audio: null, video: null });
   const [loadingLocation, setLoadingLocation] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const categories = ["Pothole", "Garbage", "Streetlight", "Water Supply", "Other"];
@@ -46,7 +48,6 @@ export default function ReportIssue() {
       alert("❌ Geolocation is not supported by your browser");
       return;
     }
-
     setLoadingLocation(true);
 
     navigator.geolocation.getCurrentPosition(
@@ -59,13 +60,13 @@ export default function ReportIssue() {
           const data = await res.json();
           setForm((prev) => ({
             ...prev,
-            location: data.display_name || `${latitude}, ${longitude}`,
+            location: data.display_name || `Longitude:${longitude}, Latitude:${latitude}`,
           }));
         } catch (err) {
           console.error("Error fetching address:", err);
           setForm((prev) => ({
             ...prev,
-            location: `${latitude}, ${longitude}`,
+            location: `Longitude:${longitude}, Latitude:${latitude}`,
           }));
         }
         setLoadingLocation(false);
@@ -79,7 +80,7 @@ export default function ReportIssue() {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.title || !form.category || !form.location || !form.description) {
@@ -87,23 +88,60 @@ export default function ReportIssue() {
       return;
     }
 
-    console.log("✅ Issue Submitted:", form);
-    alert("✅ Your issue has been reported!");
+    setSubmitting(true);
 
-    // Reset form
-    setForm({
-      title: "",
-      category: "",
-      location: "",
-      description: "",
-      image: null,
-      audio: null,
-      video: null,
-    });
-    setPreview({ image: null, audio: null, video: null });
+    try {
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("category", form.category);
+      formData.append("location", form.location);
+      formData.append("description", form.description);
 
-    // Redirect
-    navigate("/");
+      if (form.image) formData.append("image", form.image, form.image.name);
+      if (form.audio) formData.append("audio", form.audio, form.audio.name);
+      if (form.video) formData.append("video", form.video, form.video.name);
+
+      const res = await axios.post(
+        "https://backend-civic.onrender.com/issue/insert_issue",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("✅ Issue Submitted:", res.data);
+      alert("✅ Your issue has been reported!");
+
+      // Reset form
+      setForm({
+        title: "",
+        category: "",
+        location: "",
+        description: "",
+        image: null,
+        audio: null,
+        video: null,
+      });
+      setPreview({ image: null, audio: null, video: null });
+
+      navigate("/");
+    } catch (error) {
+      console.error("❌ Error submitting issue:", {
+        message: error.message,
+        responseData: error.response?.data,
+        status: error.response?.status,
+      });
+      alert(
+        "❌ Failed to submit issue. " +
+          (error.response?.data?.message
+            ? "Server says: " + error.response.data.message
+            : "Please try again.")
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -114,15 +152,11 @@ export default function ReportIssue() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-2xl bg-[#111827] border border-gray-800 rounded-2xl shadow-2xl p-8 space-y-6"
       >
-        {/* Title */}
         <h2 className="text-3xl font-extrabold text-white flex items-center gap-2">
           <MdReportProblem className="text-red-500" /> Report an Issue
         </h2>
-        <p className="text-gray-400">
-          Help us improve the community by reporting civic issues. Fill out the form below.
-        </p>
+        <p className="text-gray-400">Help us improve the community by reporting civic issues. Fill out the form below.</p>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Title */}
           <div>
@@ -200,7 +234,7 @@ export default function ReportIssue() {
             />
           </div>
 
-          {/* Image Upload */}
+          {/* File uploads */}
           <div>
             <label className="text-gray-300 font-semibold flex items-center gap-2">
               <MdImage /> Upload Image
@@ -222,7 +256,6 @@ export default function ReportIssue() {
             )}
           </div>
 
-          {/* Audio Upload */}
           <div>
             <label className="text-gray-300 font-semibold flex items-center gap-2">
               <MdAudiotrack /> Upload Audio
@@ -243,7 +276,6 @@ export default function ReportIssue() {
             )}
           </div>
 
-          {/* Video Upload */}
           <div>
             <label className="text-gray-300 font-semibold flex items-center gap-2">
               <MdVideocam /> Upload Video
@@ -265,13 +297,13 @@ export default function ReportIssue() {
             )}
           </div>
 
-          {/* Submit */}
           <motion.button
             whileTap={{ scale: 0.95 }}
             type="submit"
+            disabled={submitting}
             className="w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 transition shadow-lg"
           >
-            🚀 Submit Issue
+            {submitting ? "Submitting..." : "🚀 Submit Issue"}
           </motion.button>
         </form>
       </motion.div>
