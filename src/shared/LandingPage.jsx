@@ -220,7 +220,7 @@ export default function LandingPage() {
               </span>
             </Link>
             <Link
-              to="/User/Userlogin"
+              to="/User/login"
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-semibold transition shadow"
             >
               User Login
