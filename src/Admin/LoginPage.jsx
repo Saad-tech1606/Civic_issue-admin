@@ -38,7 +38,7 @@ export default function LoginPage({ onLogin, onSwitchToSignup }) {
           Civic<span className="text-blue-400">Admin</span> Portal
         </h1>
         <p className="text-gray-400 text-center mb-6 text-sm">
-          Authorized Government Officials Only
+          Any Email ID & Password will work for demo purposes.
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -84,14 +84,11 @@ export default function LoginPage({ onLogin, onSwitchToSignup }) {
 
         {/* Switch to Signup */}
         <p className="mt-6 text-gray-400 text-sm text-center">
-          Don’t have an account?{" "}
-          <button
-            type="button"
-            onClick={onSwitchToSignup}
-            className="text-blue-400 hover:underline"
-          >
+          Don’t have an account?
+          <button          >
             Request Signup
           </button>
+          (backend work going on)
         </p>
 
         {/* Security Notice */}

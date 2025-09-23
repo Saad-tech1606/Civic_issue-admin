@@ -52,6 +52,9 @@ export default function UserLogin() {
             <h2 className="text-3xl font-bold text-white mb-4">
               Welcome Back, User!
             </h2>
+            <h4 className="text-3xl font-bold text-white mb-4">
+              Signup needed(backend connected)
+            </h4>
             <p className="text-gray-200 text-base max-w-xs mx-auto">
               Manage civic issues, track reports, and oversee the community
               dashboard securely.

@@ -113,6 +113,8 @@ export default function ReportIssue() {
 
       console.log("✅ Issue Submitted:", res.data);
       alert("✅ Your issue has been reported!");
+      alert("Go to Admin Login side from landing page to see the issue you reported.");
+     
 
       // Reset form
       setForm({
