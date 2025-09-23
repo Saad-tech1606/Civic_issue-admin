@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaGoogle } from "react-icons/fa";
-import axios from "axios";
 
 export default function UserLogin() {
   const [email, setEmail] = useState("");
@@ -10,26 +9,17 @@ export default function UserLogin() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
 
-    try {
-      const res = await axios.post(
-        "https://backend-civic.onrender.com/user/user_all", // ✅ login API
-        { email, password }
-      );
-
-      if (res.data.auth === "success") {
-        console.log("✅ User logged in:", res.data);
-        alert("Login successful!");
-        navigate("/user/dashboard"); // ✅ redirect on success
-      } else {
-        setError(res.data.message || "Invalid email or password");
-      }
-    } catch (err) {
-      console.error("❌ Login error:", err);
-      setError("Server error. Please try again later.");
+    // ✅ Hardcoded login success for any input
+    if (email.trim() !== "" && password.trim() !== "") {
+      console.log("✅ Hardcoded login successful:", { email, password });
+      alert("Login successful!");
+      navigate("/user/dashboard");
+    } else {
+      setError("Please enter email and password");
     }
   };
 
@@ -53,7 +43,7 @@ export default function UserLogin() {
               Welcome Back, User!
             </h2>
             <h4 className="text-3xl font-bold text-white mb-4">
-              Signup needed(backend connected)
+              Signup not required (Hardcoded Login Active)
             </h4>
             <p className="text-gray-200 text-base max-w-xs mx-auto">
               Manage civic issues, track reports, and oversee the community
@@ -152,8 +142,7 @@ export default function UserLogin() {
           {/* Warning */}
           <p className="mt-4 text-yellow-400 text-xs text-center flex items-center justify-center gap-1">
             <span className="text-lg">⚠️</span>
-            Unauthorized access is prohibited and may be subject to disciplinary
-            action.
+            Unauthorized access is allowed for demo purposes only.
           </p>
         </div>
       </div>
