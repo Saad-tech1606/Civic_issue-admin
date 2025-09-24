@@ -1,12 +1,32 @@
-# React + Vite
+# 🏙️ Civic Issue Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A comprehensive, full-stack web application designed to empower citizens to report and track local civic issues. This platform fosters a transparent and efficient line of communication between the community and civic authorities, ensuring issues like sanitation, infrastructure damage, and public nuisances are addressed swiftly.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🚀 Live Demo
 
-## Expanding the ESLint configuration
+-   **Link**: https://civic-issue-1-hfvy.onrender.com
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+### ✨ Features
+
+-   **Seamless Issue Reporting**: Users can easily submit a detailed report of a civic issue.
+-   **Interactive Map Integration**: Powered by **OpenStreetMap** and **Leaflet**, the application allows users to pinpoint the exact location of an issue on a map.
+-   **Real-time Status Tracking**: Users can monitor the progress of their reported issues, from "Pending" to "Resolved."
+-   **Responsive & Intuitive UI**: A clean, modern, and mobile-friendly interface ensures a great user experience on any device.
+-   **Visual Analytics**: **Recharts** is used to provide insightful visualizations of issue types and resolution trends.
+-   **API Integration**: The application uses a robust API to handle issue data, ensuring a dynamic and scalable system.
+
+---
+
+### 🛠️ Technologies Used
+
+-   ⚛️ **React.js**: A foundational library for building a dynamic and component-based user interface.
+-   🎨 **Material-UI (MUI)**: Provides a set of high-quality, pre-built components for a polished and professional look.
+-   💨 **Tailwind CSS**: A utility-first CSS framework for rapidly building custom designs without leaving your HTML.
+-   📊 **Recharts**: A charting library for creating beautiful and responsive data visualizations.
+-   🗺️ **OpenStreetMap & Leaflet**: Utilized for rendering interactive maps and handling location data.
+-   🌐 **API Integration**: Manages the data flow for issue submission, tracking, and retrieval.
+-   ⚡ **Other**: **Node.js** and **npm** for dependency management.
