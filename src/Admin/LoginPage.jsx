@@ -45,7 +45,7 @@ export default function LoginPage({ onLogin, onSwitchToSignup }) {
           {/* Email Input */}
           <input
             type="email"
-            placeholder="Official Email Address"
+            placeholder="Official Email Address / आधिकारिक ईमेल आईडी"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="px-4 py-3 rounded-xl bg-gray-900/60 text-white border border-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-500/30 transition-all outline-none"
@@ -55,7 +55,7 @@ export default function LoginPage({ onLogin, onSwitchToSignup }) {
           {/* Password Input */}
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Password / पासवर्ड"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="px-4 py-3 rounded-xl bg-gray-900/60 text-white border border-gray-700 focus:border-purple-500 focus:ring focus:ring-purple-500/30 transition-all outline-none"

@@ -11,11 +11,12 @@ export default function IssuesPage() {
         const res = await fetch("https://backend-civic.onrender.com/issue/issue_all");
         const data = await res.json();
 
-        // add status + notes defaults if not in API
+        // add defaults if not in API
         const enriched = data.map((issue) => ({
           ...issue,
           status: issue.status || "Pending",
           notes: issue.notes || "",
+          department: issue.department || "Unassigned",
         }));
 
         setIssues(enriched);
@@ -78,7 +79,7 @@ export default function IssuesPage() {
             key={issue._id}
             className="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 shadow-xl hover:scale-[1.01] transition"
           >
-            <div className="flex justify-between items-start mb-4">
+            <div className="flex justify-between items-start mb-4 gap-4">
               <div>
                 <h2 className="text-xl text-white font-semibold">
                   {issue.title}
@@ -91,18 +92,34 @@ export default function IssuesPage() {
                 )}
               </div>
 
-              {/* Status Dropdown */}
-              <select
-                value={issue.status}
-                onChange={(e) =>
-                  updateIssue(issue._id, "status", e.target.value)
-                }
-                className="px-3 py-2 rounded-lg bg-gray-900/70 border border-gray-600 text-white focus:border-blue-500"
-              >
-                <option>Pending</option>
-                <option>In Progress</option>
-                <option>Resolved</option>
-              </select>
+              <div className="flex gap-3">
+                {/* Status Dropdown */}
+                <select
+                  value={issue.status}
+                  onChange={(e) => updateIssue(issue._id, "status", e.target.value)}
+                  className="px-3 py-2 rounded-lg bg-gray-900/70 border border-gray-600 text-white focus:border-blue-500"
+                >
+                  <option>Pending</option>
+                  <option>In Progress</option>
+                  <option>Resolved</option>
+                </select>
+
+                {/* Department Dropdown */}
+                <select
+                  value={issue.department}
+                  onChange={(e) =>
+                    updateIssue(issue._id, "department", e.target.value)
+                  }
+                  className="px-3 py-2 rounded-lg bg-gray-900/70 border border-gray-600 text-white focus:border-green-500"
+                >
+                  <option>Unassigned</option>
+                  <option>Sanitation</option>
+                  <option>Roads</option>
+                  <option>Water Supply</option>
+                  <option>Electricity</option>
+                  <option>Others</option>
+                </select>
+              </div>
             </div>
 
             {/* Description */}
@@ -123,9 +140,7 @@ export default function IssuesPage() {
             <textarea
               placeholder="Add notes or comments..."
               value={issue.notes || ""}
-              onChange={(e) =>
-                updateIssue(issue._id, "notes", e.target.value)
-              }
+              onChange={(e) => updateIssue(issue._id, "notes", e.target.value)}
               className="w-full p-3 rounded-lg bg-gray-900/70 border border-gray-700 text-white focus:border-purple-500 focus:ring-purple-500/30 outline-none resize-none"
               rows={3}
             />
