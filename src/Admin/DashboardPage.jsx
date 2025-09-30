@@ -56,7 +56,7 @@ const DashboardPage = () => {
   const issues = [
     {
       id: 1,
-      title: "Pothole Repair",
+      title: "Garbage Overflow",
       status: "Pending",
       location: "Main Road",
       date: "2025-09-05",
@@ -65,7 +65,7 @@ const DashboardPage = () => {
     },
     {
       id: 2,
-      title: "Water Leakage",
+      title: "Disposal waste",
       status: "Resolved",
       location: "Sector 5",
       date: "2025-09-03",
@@ -74,7 +74,7 @@ const DashboardPage = () => {
     },
     {
       id: 3,
-      title: "Power Outage",
+      title: "Immidiate sanitization required",
       status: "Critical",
       location: "Block C",
       date: "2025-09-02",
