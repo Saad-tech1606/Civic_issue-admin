@@ -95,16 +95,7 @@ Both frontend and backend are hosted on **Vercel** for seamless integration and 
 🔗 **Backend:** Deployed on Vercel Serverless Functions  
 
 ---
-
-## 🧪 Local Setup  
-
-### 1. Clone the repository  
-```bash
-git clone https://github.com/YourUsername/civic-issue-admin.git
-cd civic-issue-admin
-
----
-## 📈 Future Enhancements
+📈 Future Enhancements
 
 🔔 Automated email notifications to citizens upon issue status change
 
@@ -115,3 +106,13 @@ cd civic-issue-admin
 🗺️ Advanced geospatial analytics using Mapbox
 
 👥 Role-based access system (e.g., Super Admin, Field Officer)
+
+
+## 🧪 Local Setup  
+
+### 1. Clone the repository  
+```bash
+git clone https://github.com/YourUsername/civic-issue-admin.git
+cd civic-issue-admin
+
+---
